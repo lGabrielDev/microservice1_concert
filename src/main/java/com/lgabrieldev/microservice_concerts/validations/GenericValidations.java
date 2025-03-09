@@ -13,6 +13,10 @@ public class GenericValidations {
         return field != null && field != 0;
     }
 
+    public static Boolean fieldIsNotNull(Long field){
+        return field != null;
+    }
+
 
     //field max characters
     public static Boolean fieldLengthIsOk(String field, Integer maxCharacters){

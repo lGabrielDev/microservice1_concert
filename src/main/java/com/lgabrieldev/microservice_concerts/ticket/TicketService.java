@@ -8,6 +8,7 @@ import com.lgabrieldev.microservice_concerts.concert.DTOs.conversions.Conversion
 import com.lgabrieldev.microservice_concerts.ticket.DTOs.TicketCreateDto;
 import com.lgabrieldev.microservice_concerts.ticket.DTOs.TicketFullDto;
 import com.lgabrieldev.microservice_concerts.ticket.DTOs.TicketOnlyIdAndEmailDto;
+import com.lgabrieldev.microservice_concerts.ticket.validations.TicketValidations;
 
 @Service
 public class TicketService {
@@ -27,6 +28,8 @@ public class TicketService {
     // ----------------------------- CREATE ----------------------------- 
     public TicketFullDto createTicket(TicketCreateDto ticketCreateDto){
         //validation............
+        TicketValidations.allAttributesAreCorrect(ticketCreateDto, this.concertRepository, ticketCreateDto.getEmail());
+
         Ticket ticket = new Ticket(ticketCreateDto);
 
         Concert concert = this.concertRepository.findById(ticketCreateDto.getConcertId())

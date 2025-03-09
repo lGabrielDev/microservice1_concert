@@ -1,6 +1,9 @@
 package com.lgabrieldev.microservice_concerts.concert.validations;
 
 import com.lgabrieldev.microservice_concerts.concert.ConcertRepository;
+import com.lgabrieldev.microservice_concerts.concert.errors.TitleIsNotUniqueException;
+import com.lgabrieldev.microservice_concerts.errors.FieldCannotBeNullException;
+import com.lgabrieldev.microservice_concerts.errors.FieldLengthIsWrongException;
 import com.lgabrieldev.microservice_concerts.validations.GenericValidations;
 
 public class ConcertTitleValidations {
@@ -9,7 +12,7 @@ public class ConcertTitleValidations {
     public static Boolean titleIsNotNull(String title){
 
         if(GenericValidations.fieldIsNotNull(title) == false){
-            throw new RuntimeException(String.format("Concert title cannot be NULL!"));
+            throw new FieldCannotBeNullException(String.format("Concert 'title' cannot be NULL!"));
         }
         return true;
     }
@@ -19,7 +22,7 @@ public class ConcertTitleValidations {
     public static Boolean titleLengthIsCorrect(String title){
 
         if(GenericValidations.fieldLengthIsOk(title, 100) == false){
-            throw new RuntimeException(String.format("Concert title length is too long... It Must be under than 100 characters"));
+            throw new FieldLengthIsWrongException(String.format("Concert 'title' length is too long... It Must be under than 100 characters"));
         }
         return true;
     }
@@ -28,7 +31,7 @@ public class ConcertTitleValidations {
     public static Boolean titleIsUnique(String title, ConcertRepository concertRepository){
         concertRepository.findByTitle(title)
             .ifPresent((a) -> {
-                throw new RuntimeException(String.format("Concert title '%s' already exists!", title));
+                throw new TitleIsNotUniqueException(String.format("Concert 'title' '%s' already exists!", title));
             });
 
     

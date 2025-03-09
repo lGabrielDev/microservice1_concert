@@ -2,6 +2,9 @@ package com.lgabrieldev.microservice_concerts.concert.validations;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+import com.lgabrieldev.microservice_concerts.concert.errors.DateInThePastException;
+import com.lgabrieldev.microservice_concerts.errors.FieldCannotBeNullException;
 import com.lgabrieldev.microservice_concerts.validations.GenericValidations;
 
 public class ConcertDateValidations {
@@ -10,7 +13,7 @@ public class ConcertDateValidations {
     public static Boolean dateIsNotNull(String date){
 
         if(GenericValidations.fieldIsNotNull(date) == false){
-            throw new RuntimeException(String.format("Concert date cannot be NULL!"));
+            throw new FieldCannotBeNullException(String.format("Concert date cannot be NULL!"));
         }
         return true;
     }
@@ -30,7 +33,7 @@ public class ConcertDateValidations {
         LocalDate inputDate = dateFormatIsCorrect(date);
 
         if((inputDate.isBefore(today))){
-            throw new RuntimeException("Date has passed. Please provide a future date.");
+            throw new DateInThePastException("Date has passed. Please provide a future date.");
         }
 
         return true;
