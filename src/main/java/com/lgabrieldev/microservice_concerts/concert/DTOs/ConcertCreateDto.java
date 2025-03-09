@@ -1,6 +1,5 @@
 package com.lgabrieldev.microservice_concerts.concert.DTOs;
 
-import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +13,6 @@ public class ConcertCreateDto {
     private String title;
     private String description;
     private String city;
-    private LocalDate date;
+    private String date;
     private int maxParticipants;
 }

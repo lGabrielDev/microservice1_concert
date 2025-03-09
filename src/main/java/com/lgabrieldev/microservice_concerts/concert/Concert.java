@@ -1,6 +1,7 @@
 package com.lgabrieldev.microservice_concerts.concert;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 import com.lgabrieldev.microservice_concerts.concert.DTOs.ConcertCreateDto;
@@ -52,7 +53,11 @@ public class Concert {
         this.title = concertCreateDto.getTitle();
         this.description = concertCreateDto.getDescription();
         this.city = concertCreateDto.getCity();
-        this.date = concertCreateDto.getDate();
+
+        DateTimeFormatter brFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        this.date = LocalDate.parse(concertCreateDto.getDate(), brFormat);
+
+
         this.maxParticipants = concertCreateDto.getMaxParticipants();
 
         this.tickets = new HashSet<>();

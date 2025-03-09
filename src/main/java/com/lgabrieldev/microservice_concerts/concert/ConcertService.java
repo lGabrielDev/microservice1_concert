@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.lgabrieldev.microservice_concerts.concert.DTOs.ConcertCreateDto;
 import com.lgabrieldev.microservice_concerts.concert.DTOs.ConcertFullDto;
 import com.lgabrieldev.microservice_concerts.concert.DTOs.conversions.Conversions;
+import com.lgabrieldev.microservice_concerts.concert.validations.ConcertValidations;
 
 @Service
 public class ConcertService {
@@ -22,7 +23,8 @@ public class ConcertService {
 
     // ----------------------------- CREATE ----------------------------- 
     public ConcertFullDto createConcert(ConcertCreateDto concertCreateDto){
-        //todas as validacoes...... Fazer depois.....
+        //validations
+        ConcertValidations.allAttributesAreCorrect(concertCreateDto, this.concertRepository);
 
         Concert concert = new Concert(concertCreateDto);
 
@@ -31,10 +33,16 @@ public class ConcertService {
     
     // ----------------------------- READ ALL ----------------------------- 
     public List<ConcertFullDto> getAllConcerts(){
-        return Conversions.convert(this.concertRepository.findAll());
+        return Conversions.convertConcert(this.concertRepository.findAll());
     }
 
 
     // ----------------------------- READ concert by #ID ----------------------------- 
+    public ConcertFullDto getConcertById(Long id){
+        //todas as validacoes...... Fazer depois.....
+        Concert concert = this.concertRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException(String.format("Concert #%d does not exists", id)));
+        return new ConcertFullDto(concert);
+    }
 
 }

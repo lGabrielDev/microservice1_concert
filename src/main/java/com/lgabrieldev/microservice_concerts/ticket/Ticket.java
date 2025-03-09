@@ -1,7 +1,7 @@
 package com.lgabrieldev.microservice_concerts.ticket;
 
 import com.lgabrieldev.microservice_concerts.concert.Concert;
-
+import com.lgabrieldev.microservice_concerts.ticket.DTOs.TicketCreateDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,7 +22,6 @@ import lombok.Setter;
 public class Ticket {
     
     //attributes
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,5 +33,10 @@ public class Ticket {
     @ManyToOne(targetEntity = Concert.class)
     @JoinColumn(name = "concert_id", nullable = false)
     private Concert concert;
+
+    //constructors
+     public Ticket(TicketCreateDto ticketCreateDto){
+        this.email = ticketCreateDto.getEmail();
+    }
 
 }
