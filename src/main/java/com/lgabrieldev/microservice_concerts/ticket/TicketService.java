@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.lgabrieldev.microservice_concerts.concert.Concert;
 import com.lgabrieldev.microservice_concerts.concert.ConcertRepository;
 import com.lgabrieldev.microservice_concerts.concert.DTOs.conversions.Conversions;
+import com.lgabrieldev.microservice_concerts.microserviceEmail.EmailController;
 import com.lgabrieldev.microservice_concerts.ticket.DTOs.TicketCreateDto;
 import com.lgabrieldev.microservice_concerts.ticket.DTOs.TicketFullDto;
 import com.lgabrieldev.microservice_concerts.ticket.DTOs.TicketOnlyIdAndEmailDto;
@@ -18,16 +19,18 @@ public class TicketService {
     //attributes
     private TicketRepository ticketRepository;
     private ConcertRepository concertRepository;
+    private EmailController emailController;
 
     //constructors
-    public TicketService(TicketRepository ticketRepository, ConcertRepository concertRepository){
+    public TicketService(TicketRepository ticketRepository, ConcertRepository concertRepository, EmailController emailController){
         this.ticketRepository = ticketRepository;
         this.concertRepository = concertRepository;
+        this.emailController = emailController;
     }
 
 
     // ----------------------------- CREATE ----------------------------- 
-    public TicketFullDto createTicket(TicketCreateDto ticketCreateDto){
+    public String createTicket(TicketCreateDto ticketCreateDto){
         //validation............
         TicketValidations.allAttributesAreCorrect(ticketCreateDto, this.concertRepository, ticketCreateDto.getEmail());
 
@@ -39,11 +42,8 @@ public class TicketService {
         ticket.setConcert(concert);
         this.ticketRepository.save(ticket);
 
-        //send email
 
-
-
-        return new TicketFullDto(ticket);
+        return this.emailController.sendEmail(new TicketFullDto(ticket));
     }
   
     

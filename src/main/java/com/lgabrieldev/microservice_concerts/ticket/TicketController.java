@@ -29,7 +29,7 @@ public class TicketController {
 
     // ----------------------------- POST ----------------------------- 
     @PostMapping("/ticket")
-    public ResponseEntity<TicketFullDto> createConcert(@RequestBody TicketCreateDto ticketCreateDto){
+    public ResponseEntity<String> createConcert(@RequestBody TicketCreateDto ticketCreateDto){
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(this.ticketService.createTicket(ticketCreateDto));
