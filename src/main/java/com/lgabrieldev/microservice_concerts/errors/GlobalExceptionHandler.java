@@ -13,6 +13,7 @@ import com.lgabrieldev.microservice_concerts.concert.errors.TitleIsNotUniqueExce
 import com.lgabrieldev.microservice_concerts.ticket.errors.ConcertIdIsWrongException;
 import com.lgabrieldev.microservice_concerts.ticket.errors.EmailAlreadyRegisteredInConcertException;
 import com.lgabrieldev.microservice_concerts.ticket.errors.EmailIsWrongException;
+import com.lgabrieldev.microservice_concerts.ticket.validations.TicketIdIsWrongException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -97,6 +98,15 @@ public class GlobalExceptionHandler {
     // ============ ticket errors ============
     @ExceptionHandler(ConcertIdIsWrongException.class)
     public ResponseEntity<DefaultErrorDto> concertIdIsWrongExceptionHandler(ConcertIdIsWrongException e){
+        DefaultErrorDto defaultErrorDto = new DefaultErrorDto();
+        defaultErrorDto.setStatus(HttpStatus.BAD_REQUEST.value());
+        defaultErrorDto.setErrorMessage(e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(defaultErrorDto);
+    }
+
+    @ExceptionHandler(TicketIdIsWrongException.class)
+    public ResponseEntity<DefaultErrorDto> ticketIdIsWrongExceptionHandler(TicketIdIsWrongException e){
         DefaultErrorDto defaultErrorDto = new DefaultErrorDto();
         defaultErrorDto.setStatus(HttpStatus.BAD_REQUEST.value());
         defaultErrorDto.setErrorMessage(e.getMessage());

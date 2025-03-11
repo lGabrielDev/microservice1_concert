@@ -8,6 +8,7 @@ import com.lgabrieldev.microservice_concerts.concert.DTOs.conversions.Conversion
 import com.lgabrieldev.microservice_concerts.ticket.DTOs.TicketCreateDto;
 import com.lgabrieldev.microservice_concerts.ticket.DTOs.TicketFullDto;
 import com.lgabrieldev.microservice_concerts.ticket.DTOs.TicketOnlyIdAndEmailDto;
+import com.lgabrieldev.microservice_concerts.ticket.validations.TicketIdIsWrongException;
 import com.lgabrieldev.microservice_concerts.ticket.validations.TicketValidations;
 
 @Service
@@ -38,6 +39,10 @@ public class TicketService {
         ticket.setConcert(concert);
         this.ticketRepository.save(ticket);
 
+        //send email
+
+
+
         return new TicketFullDto(ticket);
     }
   
@@ -53,7 +58,7 @@ public class TicketService {
     public TicketFullDto getTicketById(Long id){
         //todas as validacoes...... Fazer depois.....
         Ticket ticket = this.ticketRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException(String.format("Ticket #%d does not exists", id)));
+            .orElseThrow(() -> new TicketIdIsWrongException(String.format("Ticket #%d does not exists", id)));
         return new TicketFullDto(ticket);
     }
 

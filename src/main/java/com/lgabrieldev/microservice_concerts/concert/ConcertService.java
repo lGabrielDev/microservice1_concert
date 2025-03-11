@@ -8,6 +8,7 @@ import com.lgabrieldev.microservice_concerts.concert.DTOs.ConcertCreateDto;
 import com.lgabrieldev.microservice_concerts.concert.DTOs.ConcertFullDto;
 import com.lgabrieldev.microservice_concerts.concert.DTOs.conversions.Conversions;
 import com.lgabrieldev.microservice_concerts.concert.validations.ConcertValidations;
+import com.lgabrieldev.microservice_concerts.ticket.errors.ConcertIdIsWrongException;
 
 @Service
 public class ConcertService {
@@ -41,7 +42,7 @@ public class ConcertService {
     public ConcertFullDto getConcertById(Long id){
         //todas as validacoes...... Fazer depois.....
         Concert concert = this.concertRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException(String.format("Concert #%d does not exists", id)));
+            .orElseThrow(() -> new ConcertIdIsWrongException(String.format("Concert #%d does not exists", id)));
         return new ConcertFullDto(concert);
     }
 
