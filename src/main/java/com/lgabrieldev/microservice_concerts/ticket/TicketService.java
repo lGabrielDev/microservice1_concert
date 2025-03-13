@@ -42,8 +42,7 @@ public class TicketService {
         ticket.setConcert(concert);
         this.ticketRepository.save(ticket);
 
-
-        return this.emailController.sendEmail(new TicketFullDto(ticket));
+        return this.emailController.sendEmail(new TicketFullDto(ticket));       
     }
   
     

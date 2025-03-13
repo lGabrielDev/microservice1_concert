@@ -15,6 +15,8 @@ import com.lgabrieldev.microservice_concerts.ticket.errors.EmailAlreadyRegistere
 import com.lgabrieldev.microservice_concerts.ticket.errors.EmailIsWrongException;
 import com.lgabrieldev.microservice_concerts.ticket.validations.TicketIdIsWrongException;
 
+import feign.FeignException;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -131,4 +133,26 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(defaultErrorDto);
     }
+
+    //feignClient exceptions
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<DefaultErrorDto> feignClientExceptionsHandler(FeignException e){
+
+        DefaultErrorDto defaultErrorDto = new DefaultErrorDto();
+        defaultErrorDto.setStatus(HttpStatus.EXPECTATION_FAILED.value());
+
+        String errorMessage = e.getMessage();
+        Integer startIndex = errorMessage.indexOf(": [") + 3;
+        String simpleErrorMessage = errorMessage.substring(startIndex, errorMessage.lastIndexOf("]"));
+        
+        defaultErrorDto.setErrorMessage(simpleErrorMessage);
+
+        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(defaultErrorDto);
+    }
+    
 }
+
+// Integer startIndex = errorMessage.indexOf("[Microservice_email exception");
+// Integer endIndex = errorMessage.indexOf("not found!]");
+
+// String simpleErrorMessage = errorMessage.substring(startIndex, endIndex);
