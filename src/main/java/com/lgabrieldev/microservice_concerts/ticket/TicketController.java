@@ -12,11 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lgabrieldev.microservice_concerts.ticket.DTOs.TicketCreateDto;
 import com.lgabrieldev.microservice_concerts.ticket.DTOs.TicketFullDto;
 import com.lgabrieldev.microservice_concerts.ticket.DTOs.TicketOnlyIdAndEmailDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @RestController
 @RequestMapping("")
+@Tag(name = "Ticket Controller", description = "")
 public class TicketController {
-    
     
     //attributes
     private TicketService ticketService;
@@ -28,7 +34,14 @@ public class TicketController {
 
 
     // ----------------------------- POST ----------------------------- 
+   
     @PostMapping("/ticket")
+    @Operation(description = "Create a Ticket")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "201", description = "Ticket created successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TicketFullDto.class))),
+            @ApiResponse(responseCode = "400", description = "One or more attributes are wrong", content = {@Content(examples = {})})
+        }
+    )
     public ResponseEntity<String> createConcert(@RequestBody TicketCreateDto ticketCreateDto){
         return ResponseEntity
             .status(HttpStatus.CREATED)
@@ -36,20 +49,31 @@ public class TicketController {
     }
     
     // ----------------------------- GET ALL -----------------------------
+  
     @GetMapping("/ticket")
+    @Operation(description = "Get All Tickets")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+        }
+    )
     public ResponseEntity<List<TicketOnlyIdAndEmailDto>> getAllTickets(){
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(this.ticketService.getAllTickets());
     }
     
-
     // ----------------------------- GET ticket by #ID ----------------------------- 
     @GetMapping("/ticket/{id}")
+    @Operation(description = "Get Ticket by #ID")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TicketFullDto.class))),
+            @ApiResponse(responseCode = "400", description = "Ticket #ID not found!", content = {@Content(examples = {})})
+        }
+    )
     public ResponseEntity<TicketFullDto> getConcertById(@PathVariable(name = "id") Long id){
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(this.ticketService.getTicketById(id));
     }
-    
+
 }
