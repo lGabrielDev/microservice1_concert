@@ -1,9 +1,7 @@
 package com.lgabrieldev.microservice_concerts.concert;
 
 import java.util.List;
-
 import org.springframework.stereotype.Service;
-
 import com.lgabrieldev.microservice_concerts.concert.DTOs.ConcertCreateDto;
 import com.lgabrieldev.microservice_concerts.concert.DTOs.ConcertFullDto;
 import com.lgabrieldev.microservice_concerts.concert.DTOs.conversions.Conversions;
@@ -35,6 +33,7 @@ public class ConcertService {
     // ----------------------------- READ ALL ----------------------------- 
     public List<ConcertFullDto> getAllConcerts(){
         return Conversions.convertConcert(this.concertRepository.findAll());
+
     }
 
 
