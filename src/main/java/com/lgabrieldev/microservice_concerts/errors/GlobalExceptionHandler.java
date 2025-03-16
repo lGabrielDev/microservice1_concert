@@ -4,8 +4,8 @@ import java.time.format.DateTimeParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.lgabrieldev.microservice_concerts.concert.errors.ConcertIsFullException;
 import com.lgabrieldev.microservice_concerts.concert.errors.DateInThePastException;
 import com.lgabrieldev.microservice_concerts.concert.errors.MaxParticipantsIsWrongException;
@@ -17,7 +17,7 @@ import com.lgabrieldev.microservice_concerts.ticket.validations.TicketIdIsWrongE
 
 import feign.FeignException;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     // ============ general errors ============
@@ -141,18 +141,18 @@ public class GlobalExceptionHandler {
         DefaultErrorDto defaultErrorDto = new DefaultErrorDto();
         defaultErrorDto.setStatus(HttpStatus.EXPECTATION_FAILED.value());
 
-        String errorMessage = e.getMessage();
-        Integer startIndex = errorMessage.indexOf(": [") + 3;
-        String simpleErrorMessage = errorMessage.substring(startIndex, errorMessage.lastIndexOf("]"));
-        
-        defaultErrorDto.setErrorMessage(simpleErrorMessage);
+        String errorMessage = e.contentUTF8();
+
+        String simpleMessage = errorMessage
+            .substring(errorMessage.indexOf("FileDoesNotExistsException"), errorMessage.indexOf("not found!") + 10)
+            .replace("\\\\", "\\");
+     
+        // defaultErrorDto.setErrorMessage(simpleErrorMessage);
+        defaultErrorDto.setErrorMessage(simpleMessage);
 
         return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(defaultErrorDto);
     }
-    
 }
-
 // Integer startIndex = errorMessage.indexOf("[Microservice_email exception");
 // Integer endIndex = errorMessage.indexOf("not found!]");
-
 // String simpleErrorMessage = errorMessage.substring(startIndex, endIndex);

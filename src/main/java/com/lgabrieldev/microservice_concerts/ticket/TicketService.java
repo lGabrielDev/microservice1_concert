@@ -38,7 +38,7 @@ public class TicketService {
 
         Concert concert = this.concertRepository.findById(ticketCreateDto.getConcertId())
             .orElseThrow(() -> new RuntimeException(String.format("Concert #%d does not exists", ticketCreateDto.getConcertId())));
-
+            
         ticket.setConcert(concert);
         this.ticketRepository.save(ticket);
 
